@@ -1,0 +1,221 @@
+{% extends 'driver/driver_page.html' %}
+
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>   
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mt-3">
+        
+
+        <!-- Earnings -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Earnings (Monthly)</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ earnings_month }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-dong-sign fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quantity Order -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Order (Complete)
+                            </div>
+                            <div class="row no-gutters align-items-center">
+                                <div class="col-auto">
+                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ quantity }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LineChart -->
+        <div class="col-lg-7">
+            <canvas id="linechartCanvas"></canvas>
+        </div>
+        
+        <div class="col-lg-4">
+            <canvas id="doughnutchartCanvas"></canvas>
+        </div>
+        
+
+        <!-- BarChart -->
+        <div class="col-lg-7">
+            <canvas id="barchartCanvas"></canvas>
+        </div>
+        
+        
+    </div>
+</div>
+
+
+
+<script>
+    // Lấy dữ liệu từ Django view 
+    var y_value = {{ df_size| safe }}
+   
+    // Bar chart
+    var ctx = document.getElementById('barchartCanvas').getContext('2d');
+    var chart =   new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['SMALL', 'MEDIUM', 'LARGE'],
+            datasets: [{
+                label: 'Quantity',
+                data: y_value,
+                backgroundColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(54, 162, 235)',
+                    'rgb(255, 205, 86)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Quantity of order by size',
+                    padding: {
+                        top: 10,
+                        bottom: 30
+                    }
+                }
+            },
+            scales: {
+                x:{
+                    grid: {
+                        display: false
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                            display: false
+                        }
+                }
+            }
+        }
+    });
+
+
+
+    // Line Chart
+    
+    var x_value = {{ df_price| safe }};
+    var ctx = document.getElementById('linechartCanvas').getContext('2d');
+    var chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+            datasets: [{
+                label: 'VND',
+                data: x_value,
+                borderColor: 'rgb(255, 99, 132)',
+                backgroundColor: 'rgb(54, 162, 235)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Income on every month',
+                    padding: {
+                        top: 10,
+                        bottom: 30
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    grid: {
+                        display: true
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        display: true
+                    }
+                }
+            }
+        }
+    });
+
+    // pie chart
+    var label = ['1*', '2*', '3*', '4*', '5*'];
+    var rating_per = [1/23*100, 4/23*100, 5/23*100, 10/23*100, 3/23*100];
+    var ctx = document.getElementById('doughnutchartCanvas').getContext('2d');
+    var chart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: label,
+            datasets: [{
+                label: 'Rating Rate',
+                data: rating_per,
+                borderColor: 'rgb(255, 99, 132)',
+                backgroundColor: [
+                    'rgb(255, 255, 204)',
+                    'rgb(255, 255, 135)',
+                    'rgb(255, 255, 102)',
+                    'rgb(204, 204, 0)',
+                    'rgb(255, 0, 0)',
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Rating',
+                    padding: {
+                        top: 10,
+                        bottom: 30
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        display: false
+                    },
+                    grid: {
+                        display: false
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        display: false
+                    },
+                    grid: {
+                        display: false
+                    }
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

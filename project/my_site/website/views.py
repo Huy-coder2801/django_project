@@ -1,16 +1,14 @@
 from django.shortcuts import render, redirect
-from .forms import SignupForm
-from items.models import Product
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from .forms import SignupForm, EditProfile
+from django.urls import reverse
+
+
 
 # Create your views here.
 def index(request):
-    item = Product.objects.all()
-
-    context = {
-        'item': item
-    }
-
-    return render(request, 'core/index.html', context)
+    return render(request, 'core/index.html')
 
 def signup(request):
     if request.method == 'POST':
@@ -27,4 +25,7 @@ def signup(request):
     }
     
     return render(request, 'core/signup.html', context)
+
+
+
 

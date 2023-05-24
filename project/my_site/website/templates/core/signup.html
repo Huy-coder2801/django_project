@@ -17,6 +17,20 @@
             </div>
 
             <div class="mb-3">
+                
+                <label class="m-2 d-inline-block">First name</label><br>
+                {{ form.first_name }}
+                
+            </div>
+
+            <div class="mb-3">
+                
+                <label class="m-2 d-inline-block">Last name</label><br>
+                {{ form.last_name }}
+                
+            </div>
+
+            <div class="mb-3">
                 <label class="m-2 d-inline-block">Email</label><br>
                 {{ form.email }}
             </div>
@@ -27,9 +41,9 @@
                 {{ form.password1 }}
                 
             </div>
-
+            
             <div class="mb-3">
-                <label class="m-2">Repeat password</label><br>
+                <label class="m-2">Password confirmation</label><br>
                 {{ form.password2 }}
                 
             </div>

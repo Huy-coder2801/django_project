@@ -1,0 +1,72 @@
+{% extends 'customer/customer_page.html'%}
+
+{% block main %}
+{% url 'core:customer:orders' as orders_url %}
+
+{% url 'core:customer:archived' as archived_orders_url %}
+
+<ul class="nav nav-pills nav-fill">
+    <li class="nav-item">
+      <a class=" nav-link  {% if request.path == orders_url %} active {% endif %}" href="{% url 'core:customer:orders' %}">Current</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link {% if request.path == archived_orders_url %} active{% endif %}" aria-current="archived" href="{% url 'core:customer:archived' %}">Archived</a>
+    </li>
+</ul>
+
+<div class="list-group mt-3">
+    {% if order %}
+        {% for item in order %}
+            <a href="{% url 'core:customer:details' item.id %}" class="list-group-item list-group-item-action">
+                <div class="media mb-2">
+                    <img src="{{ item.photo.url }}" class="rounded-lg mr-3" width="100" height="100">
+                    <div class="media-body">
+                        <div class="row">
+
+                            <div class="col-lg-9">
+                                <h5 class="mb-1">{{ item.name }}</h5>
+                                
+                                <p>{{ item.description }}</p>
+
+                                <div class="d-flex mb-4">
+                                    
+                                    <div class="ml-2">
+                                        <b>{{ item.pickup_name }}</b><br>
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        <small>{{item.pickup_adress}}</small>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex ">
+                                    
+                                    <div class="ml-2">
+                                        <b>{{ item.delivery_name }}</b><br>
+                                        <i class="fa-solid fa-location-crosshairs"></i>
+                                        <small>{{item.delivery_address}}</small>
+                                    </div>
+                                    
+                                </div>
+                                <div class="text-right">
+                                    <h2 class="mb-1">Total: {{ item.price }} </h2>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 text-right d-flex flex-column justify-content-between">
+                                <div><span class="badge badge-warning mb-2">{{ item.get_status_display }}</span></div><br>
+                                
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    {% else %}
+    <div class="card">
+        <div class="card-body text-center">
+            Nothing to show here yet.
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

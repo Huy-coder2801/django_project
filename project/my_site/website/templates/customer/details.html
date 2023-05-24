@@ -1,0 +1,75 @@
+{% extends 'customer/customer_page.html' %}
+
+{% block main %}
+<div class="media mb-4 ">
+    <img src="{{ order.photo.url }}" class="rounded-lg mr-3" width="150" height="150">
+    <div class="media-body">
+        <h4>{{ order.name }}</h4>
+        <p class="text-secondary">{{ order.description }}</p>
+
+        <div class="row mb-3">
+            <div class="col-lg-3">
+                <small class="text-secondary">CATEGORY</small>
+                <span><b>{{ order.category.name }}</b></span>
+            </div>
+
+            <div class="col-lg-3">
+                <small class="text-secondary">SIZE</small><br>
+                <span><b>{{ order.get_size_display }}</b></span>
+            </div>
+            <div class="col-lg-3">
+                <small class="text-secondary">PRICE</small>
+                <span><b>{{ order.price }} VND</b></span>
+            </div>
+            <div class="col-lg-3">
+                <small class="text-secondary">QUANTITY</small>
+                <span><b>{{ order.quantity }}</b></span>
+            </div>
+        </div>
+        {% if order.status == 'processing' %}
+            <form method="post" class="text-right">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Cancel</button>
+            </form>
+        {% endif %}
+        <hr>
+        <b class="text-primary">DELIVERY INFORMATION</b>
+        <div class=" card mt-2 mb-5">
+            <div class="card-body p-4">
+                <h4 class="mb-3">Pickup</h4>
+
+                <div class="row">
+                    <div class="col">
+                        <b>Name: </b>
+                        <span>{{ order.pickup_name }}</span><br>
+                        <b>Phone number: </b>
+                        <span>{{ order.pickup_phone }}</span><br>
+                        <b>Address: </b>
+                        <span>{{ order.pickup_adress }}</span>
+                    </div> 
+                </div>
+
+            </div>
+            <hr>
+            <div class="card-body p-4">
+                <h4 class="mb-3">Delivery</h4>
+
+                <div class="row">
+                    <div class="col">
+                        <b>Name: </b>
+                        <span>{{ order.delivery_name }}</span><br>
+                        <b>Phone number: </b>
+                        <span>{{ order.delivery_phone }}</span><br>
+                        <b>Address: </b>
+                        <span>{{ order.delivery_address }}</span>
+                    </div> 
+                </div>
+
+            </div>
+                
+                
+        </div>
+    </div>
+</div>
+    
+{% endblock %}

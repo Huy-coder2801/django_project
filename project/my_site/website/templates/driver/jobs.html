@@ -1,0 +1,67 @@
+{% extends 'driver/driver_page.html'%}
+
+{% block content %}
+<div class="container">
+    <div class="list-group mt-3">
+        <h4 class="text-secondary">List Order</h4>
+        {% if job %}
+            {% for item in job %}
+                <a href="{% url 'core:driver:available_jobs' item.id %}" class="list-group-item list-group-item-action">
+                    <div class="media mb-2">
+                        <img src="{{ item.photo.url }}" class="rounded-lg mr-3" width="100" height="100">
+                        <div class="media-body">
+                            <div class="row">
+    
+                                <div class="col-lg-9">
+                                    <h5 class="mb-1">{{ item.name }}</h5>
+                                    <p>{{ item.description }}</p>
+                                    <i class="fa-solid fa-car"></i>
+                                    <small>{{item.distance}} Km</small>
+                                    <i class="fa-regular fa-clock"></i>
+                                    <small>{{item.duration}} mins</small>
+                                    <div class="d-flex mb-4">
+                                        
+                                        <div class="ml-2">
+                                            <b>{{ item.pickup_name }}</b><br>
+                                            <i class="fas fa-map-marker-alt"></i>
+                                            <small>{{item.pickup_adress}}</small>
+                                        </div>
+                                    </div>
+    
+                                    <div class="d-flex ">
+                                        
+                                        <div class="ml-2">
+                                            <b>{{ item.delivery_name }}</b><br>
+                                            <i class="fa-solid fa-location-crosshairs"></i>
+                                            <small>{{item.delivery_address}}</small>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="text-right">
+                                        <h4 class="mb-1">Total: {{ item.price }} </h4>
+                                    </div>
+                                </div>
+    
+                                <div class="col-lg-3 text-right d-flex flex-column justify-content-between">
+                                    <div><span class="badge badge-warning mb-2">{{ item.get_status_display }}</span></div><br>
+                                    
+                                    
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                
+            {% endfor %}
+        {% else %}
+        <div class="card">
+            <div class="card-body text-center">
+                Nothing to show here yet.
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+    
+{% endblock %}

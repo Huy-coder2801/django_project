@@ -1,0 +1,224 @@
+{% extends 'customer/customer_page.html' %}
+
+{% block head %}
+    <style>
+        #pills-tab a{
+            color: black;
+        }
+        #pills-tab a:hover{
+            color: orange;
+            text-decoration: none;
+        }
+        #pills-tab a.active{
+            color: orange;
+            text-decoration: none;
+        }
+    </style> 
+{%endblock%}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header bg-info  text-light   ">
+                    ORDER
+                </div>
+                <div class="card-body">
+                    {% if not order %}
+                    <p>There are currently no orders</p>
+                    {% else %}
+                        {% if current_step > 1 %}
+                        <h4>{{ order.name }}</h4>
+                        <span>{{ order.quantity }} Item</span><br>
+                        <span>{{ order.get_size_display }}</span>
+                        {% endif %}
+
+                        {% if current_step > 2 %}
+                        <hr>
+                        <p class="text-secondary"><small><b>PICKUP</b></small></p>
+                        <h4>{{ order.pickup_name }}</h4>
+                        <span>{{ order.pickup_adress }}</span><br>
+                        <span>{{ order.pickup_phone }}</span>
+                        {% endif %}
+
+                        {% if current_step > 3 %}
+                        <hr>
+                        <p class="text-secondary"><small><b>DELIVERY</b></small></p>
+                        <h4>{{ order.delivery_name }}</h4>
+                        <span>{{ order.delivery_address }}</span><br>
+                        <span>{{ order.delivery_phone }}</span>
+                        {% endif %}
+
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="card mb-5">
+                <div class="card-body">
+                    <ul class=" nav nav-pills nav-justified align-items-center mb-3" id="pills-tab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                          <a class="{% if current_step == 1 %} active {% endif %}" id="pills-info-tab" data-toggle="pill" href="#pills-info" role="tab" aria-controls="pills-info" aria-selected="true">Order Information</a>
+                        </li>
+                        <i class="fas fa-chevron-right"></i>
+                        <li class="nav-item" role="presentation">
+                          <a class="{% if current_step == 2 %} active {% endif %}" id="pills-pickup-tab" data-toggle="pill" href="#pills-pickup" role="tab" aria-controls="pills-pickup" aria-selected="false">Pickup</a>
+                        </li>
+                        <i class="fas fa-chevron-right"></i>
+                        <li class="nav-item">
+                          <a class="{% if current_step == 3 %} active {% endif %}" id="pills-delivery-tab" data-toggle="pill" href="#pills-delivery" role="tab" aria-controls="pills-delivery" aria-selected="false">Delivery</a>
+                        </li>
+                        <i class="fas fa-chevron-right"></i>
+                        <li class="nav-item">
+                            <a class="{% if current_step == 4 %} active {% endif %}" id="pills-payment-tab" data-toggle="pill" href="#pills-payment" role="tab" aria-controls="pills-payment" aria-selected="false">Payment</a>
+                        </li>
+                        
+                      </ul>
+                </div>
+            </div>
+
+            <b>CREATE A ORDER</b>
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade {% if current_step == 1 %} show active {% endif %}" id="pills-info" role="tabpanel" aria-labelledby="pills-info-tab">
+                   <h1>Order Form</h1>
+
+                   <form method="POST" enctype="multipart/form-data">
+                        <b class="text-secondary">Order Information</b>
+                        <div class="card bg-white mt-2 mb-5">
+                            <div class="card-body">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <div class=" w-100 rounded mb-3">
+                                        <label class="m-2 d-inline-block">Name:</label>
+                                        {{ step1_form.name }}
+                                    </div>
+                                    <div class=" mb-3">
+                                        <label class="m-2 d-inline-block">Description:</label>
+                                        {{ step1_form.description }}
+                                    </div>
+                                    <div class=" mb-3">
+                                        <label class="m-2 d-inline-block">Category:</label>
+                                        {{ step1_form.category }}
+                                    </div>
+                                    <div class=" mb-3">
+                                        <label class="m-2 d-inline-block">Size:</label>
+                                        {{ step1_form.size }}
+                                    </div>
+                                    <div class=" mb-3">
+                                        <label class="m-2 d-inline-block">Quantity:</label>
+                                        {{ step1_form.quantity }}
+                                    </div>
+                                    <div class=" mb-3">
+                                        <label class="m-2 d-inline-block">Photo:</label>
+                                        {{ step1_form.photo }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="step" value="1">
+                        <button class="mt-2  btn btn-warning" type="submit">Save & continue</button>
+                   </form>
+
+                </div>
+                <div class="tab-pane fade {% if current_step == 2 %}show active {% endif %}" id="pills-pickup" role="tabpanel" aria-labelledby="pills-pickup-tab">
+                   <h1>Pickup</h1> 
+
+                   <form method="POST" enctype="multipart/form-data">
+                    <b class="text-secondary">Pickup Information</b>
+                    <div class="card bg-white mt-2 mb-5">
+                        <div class="card-body">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <div class=" w-100 rounded mb-3">
+                                    <label class="m-2 d-inline-block">Pickup Address</label>
+                                    {{ step2_form.pickup_adress }}
+                                </div>
+                                <div class=" w-100 rounded mb-3">
+                                    <label class="m-2 d-inline-block">Pickup Name</label>
+                                    {{ step2_form.pickup_name }}
+                                </div>
+                                <div class=" w-100 rounded mb-3">
+                                    <label class="m-2 d-inline-block">Pickup Phone</label>
+                                    {{ step2_form.pickup_phone }}
+                                </div>
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <input type="hidden" name="step" value="2">
+                    <button type="button" class=" mt-2 btn btn-outline-warning" onclick="$('#pills-info-tab').tab('show')">Back</button>
+                    <button class="mt-2  btn btn-warning" type="submit">Save & contine</button>
+               </form>
+
+                </div>
+                <div class="tab-pane fade {% if current_step == 3 %} show active {% endif %}" id="pills-delivery" role="tabpanel" aria-labelledby="pills-delivery-tab">
+                   <h1>Delivery</h1> 
+
+                   <form method="POST" enctype="multipart/form-data">
+                    <b class="text-secondary">Delivery Information</b>
+                    <div class="card bg-white mt-2 mb-5">
+                        <div class="card-body">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <div class=" w-100 rounded mb-3">
+                                    <label class="m-2 d-inline-block">Delivery Address</label>
+                                    {{ step3_form.delivery_address }}
+                                </div>
+                                <div class=" w-100 rounded mb-3">
+                                    <label class="m-2 d-inline-block">Delivery Name</label>
+                                    {{ step3_form.delivery_name }}
+                                </div>
+                                <div class=" w-100 rounded mb-3">
+                                    <label class="m-2 d-inline-block">Delivery Phone</label>
+                                    {{ step3_form.delivery_phone }}
+                                </div>
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <input type="hidden" name="step" value="3">
+                    <button type="button" class=" mt-2 btn btn-outline-warning" onclick="$('#pills-pickup-tab').tab('show')">Back</button>
+                    <button class="mt-2  btn btn-warning" type="submit">Save & contine</button>
+               </form>
+
+                </div>
+                <div class="tab-pane fade {% if current_step == 4 %} show active {% endif %}" id="pills-payment" role="tabpanel" aria-labelledby="pills-payment-tab">
+                   <h1>Payment</h1>
+
+                    <form method="POST">
+                        <div class="card bg-wihte mt-2 mb-5">
+                            <div class="card-body">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label>Payment methods</label><br>
+                                    {{ step4_form.payment_methods }}
+                                    {% if payment_methods == 'Card Payment' %}
+                                    <div class="form-group">
+                                        <label>Your Credit/ Debit Card</label>
+                                        <input type="text" class="form-control" value="**** **** **">
+                                    </div>
+                                    {% endif %}
+
+                                    <div class="form-group mt-3">
+                                        <label>Price</label>
+                                        <input class="form-control" value="{{order.price}} VND" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="step" value="4">
+                        <button type="button" class=" mt-2 btn btn-outline-warning" onclick="$('#pills-delivery-tab').tab('show')">Back</button>
+                        <button class="mt-2  btn btn-warning" type="submit">Create a order</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
